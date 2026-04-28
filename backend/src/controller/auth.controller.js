@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
 import { generateTokenAndSetCookie } from "../utils/generateToken.js";
+import { Cookie } from "lucide-react";
 
 export const Signup =async (req, res) => {
     try {
@@ -100,10 +101,20 @@ export const Login = async (req, res) => {
 }
 
 export const Logout = (req, res) => {
-    try {
-        
-    } catch (error) {
-        console.log(`Error in Logout: ${error}`);
-        res.status(500).json({message: "Internal Server Error", error: error.message});
-    }
+    res.clearCookie("jwt", {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV !== "development",
+    });
+    return res.status(200).json({ message: "Logged out successfully" });
 }
+
+export const getMe = async (req, res) => {
+	try {
+		const user = await User.findById(req.user._id).select("-password");
+		res.status(200).json(user);
+	} catch (error) {
+		console.log("Error in getMe controller", error.message);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+};
