@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
 import { generateTokenAndSetCookie } from "../utils/generateToken.js";
-import { Cookie } from "lucide-react";
 
 export const Signup =async (req, res) => {
     try {
