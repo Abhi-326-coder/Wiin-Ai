@@ -26,6 +26,7 @@ export function SignUpForm({
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSignUp = async (e)=>{
@@ -49,6 +50,7 @@ export function SignUpForm({
             data = null;
         }
         if(!response.ok){
+            setError(data?.messsage || data?.error)
             throw new Error(data?.messsage || data?.error || "Sign up failed")
         }
         toast.success("Account Created Successfully")
@@ -92,6 +94,7 @@ export function SignUpForm({
                     </a>
                     </div>
                     <Input id="password" type="password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
+                    <p className="text-sm text-red-500">{error ? error : null}</p>
                 </Field>
                 <Field>
                     <Button type="submit" disabled={isLoading}>
