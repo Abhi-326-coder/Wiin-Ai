@@ -1,4 +1,7 @@
 // pages/Chat.jsx
+import ReactMarkdown  from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
 import { useState, useEffect, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,7 +46,7 @@ export default function Chat() {
       }
 
       // set chatId (important for history)
-      if (!chatId) setChatId(data.chatId);
+      if (!chatId) setChatId(data.chatId); // setting up the chatId
 
       const aiMessage = {
         role: "assistant",
@@ -77,8 +80,10 @@ export default function Chat() {
               msg.role === "user" ? "justify-end" : "justify-start"
             }`}
           >
-            <Card className="p-3 max-w-xl">
-              {msg.content}
+            <Card className="p-3 max-w-xl prose dark:prose-invert">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {msg.content}
+              </ReactMarkdown>
             </Card>
           </div>
         ))}

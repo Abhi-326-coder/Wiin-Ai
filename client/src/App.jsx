@@ -1,7 +1,6 @@
 import HomePage from './pages/HomePage'
 import SignUpPage from './pages/SignUpPage'
 import LoginPage from './pages/LoginPage'
-import DashBoard from './pages/DashBoard'
 import History from './pages/History'
 import Settings from './pages/Settings'
 import DashBoardLayout from './components/DashBoardLayout'
@@ -15,9 +14,8 @@ function App() {
     <>
       <Routes>
           <Route path='/' element={<HomePage />} />
-          <Route path="chat/:id?" element={<Chat />} />
           <Route path='/dashboard' element={<DashBoardLayout />}>
-            <Route index element={<DashBoard />} />
+            <Route index element={<Chat />} />
             <Route path='history' element={<History />} />
             <Route path='settings' element={<Settings />} />
           </Route>

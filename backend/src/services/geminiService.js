@@ -9,6 +9,8 @@ const GEMINI_MODELS = [
 const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504]);
 
 const getGeminiClient = () => {
+  // whole meaning of this function is 
+  // const ai = new GoogleGenAI({ apiKey });
   const apiKey = process.env.GEMINI_API_KEY?.trim();
 
   if (!apiKey) {

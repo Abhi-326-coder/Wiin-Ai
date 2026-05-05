@@ -78,7 +78,7 @@ const sendChatError = (res, err) => {
 export const sendMessage = async (req, res) => {
   try {
     const { chatId, message } = req.body;
-    const userId = req.user._id;
+    const userId = req.user._id; 
 
     if (!message?.trim()) {
       return res.status(400).json({ error: "Message is required" });
