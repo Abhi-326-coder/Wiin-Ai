@@ -102,7 +102,6 @@ export default function Chat() {
           Send
         </Button>
       </div>
-
     </div>
   );
 }

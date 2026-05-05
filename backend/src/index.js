@@ -1,5 +1,6 @@
 // Must run before other local imports read process.env (ESM evaluates all imports first).
 import "dotenv/config";
+import cors from 'cors';
 
 import express from "express";
 import path from "path";
@@ -10,6 +11,15 @@ import authRoutes from "./routes/auth.route.js";
 import chatRoutes from "./routes/chat.route.js";
 
 const app = express();
+
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+)
+
+
 const PORT = process.env.PORT || 3000;
 
 app.use(express.urlencoded({extended:true}));
