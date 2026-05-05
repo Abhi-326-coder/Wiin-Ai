@@ -15,15 +15,12 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-      },
+      '/api': "http://localhost:3000"
     },
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(__dirname, './src'), 
     },
   },
 })

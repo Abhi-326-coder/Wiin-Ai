@@ -5,6 +5,7 @@ import DashBoard from './pages/DashBoard'
 import History from './pages/History'
 import Settings from './pages/Settings'
 import DashBoardLayout from './components/DashBoardLayout'
+import Chat from './pages/Chat'
 
 import {Routes, Route} from 'react-router-dom'
 
@@ -14,6 +15,7 @@ function App() {
     <>
       <Routes>
           <Route path='/' element={<HomePage />} />
+          <Route path="chat/:id?" element={<Chat />} />
           <Route path='/dashboard' element={<DashBoardLayout />}>
             <Route index element={<DashBoard />} />
             <Route path='history' element={<History />} />
