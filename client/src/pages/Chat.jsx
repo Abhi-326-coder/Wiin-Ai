@@ -12,6 +12,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [chatId, setChatId] = useState(null);
+  const [loading, setIsLoading] = useState(false);
   const bottomRef = useRef(null);
 
   // Auto scroll to bottom
@@ -26,6 +27,7 @@ export default function Chat() {
     setMessages((prev) => [...prev, userMessage]);
 
     setInput("");
+    setIsLoading(true);
 
     try {
       const res = await fetch("/api/chat", {
@@ -65,6 +67,8 @@ export default function Chat() {
           content: err?.message || "Unable to get chat response",
         },
       ]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -79,7 +83,7 @@ export default function Chat() {
             className={`flex ${
               msg.role === "user" ? "justify-end" : "justify-start"
             }`}
-          >
+          > 
             <Card className="p-3 max-w-xl prose dark:prose-invert">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {msg.content}
@@ -87,6 +91,19 @@ export default function Chat() {
             </Card>
           </div>
         ))}
+
+        {loading && (
+          <div className="flex justify-start">
+            <Card className="p-3 max-w-xl bg-gray-900 text-white">
+              <div className="flex gap-1">
+                <span className="animate-bounce">•</span>
+                <span className="animate-bounce delay-100">•</span>
+                <span className="animate-bounce delay-200">•</span>
+              </div>
+            </Card>
+          </div>
+        )}
+
         <div ref={bottomRef} />
       </div>
 
@@ -95,10 +112,11 @@ export default function Chat() {
         <Input
           placeholder="Ask anything..."
           value={input}
+          disabled={loading}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
-        <Button onClick={sendMessage}>
+        <Button onClick={sendMessage} disabled={loading}>
           Send
         </Button>
       </div>

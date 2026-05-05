@@ -54,7 +54,7 @@ export function SignUpForm({
             throw new Error(data?.messsage || data?.error || "Sign up failed")
         }
         toast.success("Account Created Successfully")
-        navigate("/")
+        navigate("/dashboard")
     } catch (error) {
         const message = error?.message || "Unable to login";
         console.log(message);

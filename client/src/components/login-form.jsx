@@ -54,7 +54,7 @@ export function LoginForm({
         throw new Error(data?.message || data?.error || "Login failed");
       }
       toast.success("Logged In Successfully");
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       const message = error?.message || "Unable to login";
       console.log(message);
