@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
-import { toast } from "sonner"
 import { useNavigate } from "react-router-dom"
+import { useAuthStore } from "@/store/useAuthStore"
 
 export function SignUpForm({
   className,
@@ -25,42 +25,20 @@ export function SignUpForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { signup, isSigningUp } = useAuthStore();
 
   const handleSignUp = async (e)=>{
     e.preventDefault();
+    setError(null);
 
     try {
-        setIsLoading(true);
-        
-        const response = await fetch("/api/auth/signup",{
-            method:"POST",
-            headers:{
-                "Content-Type" : "application/json"
-            },
-            credentials:"include",
-            body:JSON.stringify({fullName, email, password})
-        });
-        let data = null;
-        try{
-            data = await response.json();
-        }catch{
-            data = null;
-        }
-        if(!response.ok){
-            setError(data?.messsage || data?.error)
-            throw new Error(data?.messsage || data?.error || "Sign up failed")
-        }
-        toast.success("Account Created Successfully")
-        navigate("/dashboard")
+        await signup({ fullName, email, password });
+        navigate("/dashboard");
     } catch (error) {
-        const message = error?.message || "Unable to login";
-        console.log(message);
-        toast.error(message);
-    }finally{
-        setIsLoading(false);
+        const message = error?.message || "Unable to sign up";
+        setError(message);
     }
   }
   
@@ -97,8 +75,8 @@ export function SignUpForm({
                     <p className="text-sm text-red-500">{error ? error : null}</p>
                 </Field>
                 <Field>
-                    <Button type="submit" disabled={isLoading}>
-                        {isLoading ? "Creating Account..." : "Create Account"}
+                    <Button type="submit" disabled={isSigningUp}>
+                        {isSigningUp ? "Creating Account..." : "Create Account"}
                     </Button>
                     
                     <FieldDescription className="text-center">

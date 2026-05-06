@@ -14,10 +14,10 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { toast } from "sonner"
 
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useAuthStore } from "@/store/useAuthStore"
 
 export function LoginForm({
   className,
@@ -25,42 +25,17 @@ export function LoginForm({
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { login, isLoggingIn } = useAuthStore();
 
   const handleLogin = async (e)=>{
     e.preventDefault();
 
     try {
-      setIsLoading(true);
-
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
-
-      let data = null;
-      try {
-        data = await response.json();
-      } catch {
-        data = null;
-      }
-
-      if (!response.ok) {
-        throw new Error(data?.message || data?.error || "Login failed");
-      }
-      toast.success("Logged In Successfully");
+      await login({ email, password });
       navigate("/dashboard");
     } catch (error) {
-      const message = error?.message || "Unable to login";
-      console.log(message);
-      toast.error(message);
-    } finally {
-      setIsLoading(false);
+      console.log(error?.message || "Unable to login");
     }
   }
   
@@ -92,8 +67,8 @@ export function LoginForm({
                 <Input id="password" type="password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
               </Field>
               <Field>
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? "Logging in..." : "Login"}
+                <Button type="submit" disabled={isLoggingIn}>
+                  {isLoggingIn ? "Logging in..." : "Login"}
                 </Button>
                 
                 <FieldDescription className="text-center">
