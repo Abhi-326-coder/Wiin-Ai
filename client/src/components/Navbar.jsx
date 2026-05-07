@@ -15,7 +15,7 @@ const Navbar = () => {
             <h1 className="text-xl font-bold flex  items-center">
                 <p>WiinAi</p>
             </h1>
-            <div >
+            <div>
               <Button variant="outline" onClick={handleLogin}>Login</Button>
               <Button variant="outline" onClick={handleSignup}>Sign up</Button>
             </div>

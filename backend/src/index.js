@@ -9,6 +9,7 @@ import connectMongoDB from "./db/connectMongoDB.js";
 
 import authRoutes from "./routes/auth.route.js";
 import chatRoutes from "./routes/chat.route.js";
+import imageRoutes from "./routes/image.route.js";
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/image",imageRoutes);
 
 app.get("/", (req, res)=>{
     res.send("Hello World");
