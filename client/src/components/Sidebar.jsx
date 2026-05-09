@@ -23,7 +23,7 @@ export default function Sidebar() {
 
         {/* Navigation */}
         <div className="space-y-2">
-          <NavLink to="/dashboard" end className={linkClass}>
+          <NavLink to="/dashboard/chat" end className={linkClass}>
             💬 New Chat
           </NavLink>
 

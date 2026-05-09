@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useParams } from 'react-router-dom';
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
@@ -19,6 +20,8 @@ export default function Chat() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const {id} = useParams();
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -72,8 +75,54 @@ export default function Chat() {
     }
   };
 
+  useEffect(() => {
+    if (!id) return;
+  
+    const fetchMessages = async () => {
+      try {
+        setIsLoading(true);
+  
+        const res = await fetch(`/api/chat/${id}`, {
+          credentials: "include",
+        });
+  
+        const data = await res.json();
+  
+        if (!res.ok) {
+          throw new Error(data?.error || "Unable to load chat");
+        }
+  
+        // Load old messages
+        setMessages(data);
+  
+        // Set active chat
+        setChatId(id);
+  
+      } catch (error) {
+        console.error(error);
+        toast.error(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchMessages();
+  
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) {
+      setMessages([]);
+      setChatId(null);
+    }
+  }, [id]);
+
+
   return (
-    <div className="flex flex-col h-full max-h-screen">
+    <div className="flex flex-col h-full max-h-screen p-6">
+      <h1 className="text-3xl font-bold mb-6">
+        Chat 
+      </h1>
       
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">

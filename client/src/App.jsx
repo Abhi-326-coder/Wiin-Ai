@@ -1,7 +1,7 @@
 import HomePage from './pages/HomePage'
 import SignUpPage from './pages/SignUpPage'
 import LoginPage from './pages/LoginPage'
-import History from './pages/History'
+import History from './pages/HistoryPage'
 import Settings from './pages/Settings'
 import DashBoardLayout from './components/DashBoardLayout'
 import Chat from './pages/Chat'
@@ -16,6 +16,7 @@ import { useEffect } from 'react'
 function App() {
 
   const {authUser , isCheckingAuth, checkAuth} = useAuthStore();
+  
 
   useEffect(()=>{
     checkAuth();
@@ -33,8 +34,11 @@ function App() {
     <>
       <Routes>
           <Route path='/' element={<HomePage />} />
+          <Route path='/dashboard/chat' element={<Navigate to='/dashboard' />} />
+          
           <Route path='/dashboard' element={authUser ? <DashBoardLayout/> : <Navigate to='/login'  />}>
             <Route index element={<Chat />} />
+            <Route path='chat/:id' element={<Chat />} />
             <Route path='history' element={<History />} />
             <Route path='settings' element={<Settings />} />
           </Route>
