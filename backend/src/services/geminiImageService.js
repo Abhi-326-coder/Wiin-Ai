@@ -2,34 +2,37 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
-
 export const generateImage = async (prompt) => {
   try {
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error("GEMINI_API_KEY is not configured");
+    }
+
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+    });
+
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash-preview-image-generation",
+      model: process.env.GEMINI_IMAGE_MODEL || "gemini-2.0-flash-preview-image-generation",
       contents: prompt,
       config: {
-        responseModalities: ["TEXT", "IMAGE"],
+        responseModalities: ["IMAGE"],
       },
     });
 
-    // Extract image
-    for (const part of response.candidates[0].content.parts) {
-      if (part.inlineData) {
-        return {
-          mimeType: part.inlineData.mimeType,
-          data: part.inlineData.data,
-        };
-      }
+    const imagePart = response.candidates?.[0]?.content?.parts?.find(
+      (part) => part.inlineData?.data
+    );
+
+    if (imagePart?.inlineData?.data) {
+      return {
+        mimeType: imagePart.inlineData.mimeType || "image/png",
+        data: imagePart.inlineData.data,
+      };
     }
 
     throw new Error("No image generated");
-
   } catch (error) {
-    console.error("Image generation error:", error);
     throw error;
   }
 };

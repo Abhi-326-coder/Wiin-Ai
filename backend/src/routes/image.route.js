@@ -2,10 +2,11 @@
 
 import express from "express";
 
-import { generateImageController } from "../controllers/imageController.js";
+import { generateImageController } from "../controller/image.controller.js";
+import { protectRoute } from "../utils/protectRoute.js";
 
 const router = express.Router();
 
-router.post("/", generateImageController);
+router.post("/", protectRoute, generateImageController);
 
 export default router;

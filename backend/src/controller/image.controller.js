@@ -1,33 +1,38 @@
 // controllers/imageController.js
 
-import Image from "../models/Image.js";
+import Image from "../models/image.model.js";
 import { generateImage } from "../services/geminiImageService.js";
 import cloudinary from "../config/cloudinary.js";
 
 export const generateImageController = async (req, res) => {
   try {
     const { prompt } = req.body;
+    const userId = req.user?._id || req.user?.id;
 
-    if (!prompt) {
+    if (!prompt?.trim()) {
       return res.status(400).json({
         error: "Prompt is required",
       });
     }
 
-    const generated = await generateImage(prompt);
+    if (!userId) {
+      return res.status(401).json({
+        error: "Unauthorized",
+      });
+    }
 
-    // Convert base64 → Data URI
+    const trimmedPrompt = prompt.trim();
+    const generated = await generateImage(trimmedPrompt);
     const base64Image = `data:${generated.mimeType};base64,${generated.data}`;
 
-    // Upload to Cloudinary
     const uploaded = await cloudinary.uploader.upload(base64Image, {
       folder: "ai-images",
+      resource_type: "image",
     });
 
-    // Save in MongoDB
     const imageDoc = await Image.create({
-      userId: req.user.id,
-      prompt,
+      userId,
+      prompt: trimmedPrompt,
       imageUrl: uploaded.secure_url,
       publicId: uploaded.public_id,
     });
@@ -36,12 +41,14 @@ export const generateImageController = async (req, res) => {
       success: true,
       image: imageDoc,
     });
-
   } catch (error) {
     console.error(error);
 
-    res.status(500).json({
+    const status = error.status >= 400 && error.status < 500 ? error.status : 500;
+
+    res.status(status).json({
       error: "Image generation failed",
+      details: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };
