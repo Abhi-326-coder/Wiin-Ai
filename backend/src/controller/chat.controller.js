@@ -130,31 +130,35 @@ export const sendMessage = async (req, res) => {
 // controllers/chatController.js
 export const getUserChats = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const chats = await Chat.find({
+      userId: req.user.id,
+    }).sort({ updatedAt: -1 });
 
-    const chats = await Chat.find({ userId }).sort({ updatedAt: -1 });
+    res.status(200).json(chats);
 
-    res.json(chats);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+
+    res.status(500).json({
+      error: "Unable to fetch chats",
+    });
   }
 };
 export const getChatMessages = async (req, res) => {
   try {
     const { chatId } = req.params;
-    const userId = req.user._id;
 
-    const chat = await Chat.findOne({ _id: chatId, userId });
-    if (!chat) {
-      return res.status(404).json({ error: "Chat not found" });
-    }
+    const messages = await Message.find({
+      chatId,
+    }).sort({ createdAt: 1 });
 
-    const messages = await Message.find({ chatId }).sort("createdAt");
+    res.status(200).json(messages);
 
-    res.json(messages);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+
+    res.status(500).json({
+      error: "Unable to fetch messages",
+    });
   }
 };
