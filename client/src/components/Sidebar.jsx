@@ -34,6 +34,10 @@ export default function Sidebar() {
           <NavLink to="/dashboard/settings" className={linkClass}>
             ⚙️ Settings
           </NavLink>
+          <NavLink to="/dashboard/image" className={linkClass}>
+            ⚙️ Generate Image
+          </NavLink>
+
         </div>
       </div>
 

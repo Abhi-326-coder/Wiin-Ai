@@ -5,6 +5,7 @@ import History from './pages/HistoryPage'
 import Settings from './pages/Settings'
 import DashBoardLayout from './components/DashBoardLayout'
 import Chat from './pages/Chat'
+import ImageGenerator from './pages/ImageGenerator'
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 
@@ -41,6 +42,7 @@ function App() {
             <Route path='chat/:id' element={<Chat />} />
             <Route path='history' element={<History />} />
             <Route path='settings' element={<Settings />} />
+            <Route path='image' element={<ImageGenerator />} />
           </Route>
           <Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to='/dashboard'  />} />
           <Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to='/dashboard'  />} />
