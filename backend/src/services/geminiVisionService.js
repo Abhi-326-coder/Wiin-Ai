@@ -7,7 +7,7 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
 
-export const analyzeImage = async (imagePath, prompt) => {
+export const analyzeImage = async (imagePath, mimeType, prompt) => {
   try {
     // Read image file
     const imageBuffer = fs.readFileSync(imagePath);
@@ -27,7 +27,7 @@ export const analyzeImage = async (imagePath, prompt) => {
             },
             {
               inlineData: {
-                mimeType: "image/png",
+                mimeType,
                 data: base64Image,
               },
             },

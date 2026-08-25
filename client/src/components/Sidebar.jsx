@@ -1,5 +1,6 @@
 // components/Sidebar.jsx
 import { NavLink } from "react-router-dom";
+import { Clock, Eye, ImageIcon, MessageCircle, Settings } from "lucide-react";
 import LogOutBtn from "./LogOutBtn";
 
 export default function Sidebar() {
@@ -11,38 +12,41 @@ export default function Sidebar() {
     }`;
 
   return (
-    <div className="h-screen w-64 bg-black text-white flex flex-col justify-between border-r border-gray-800">
-      
-      {/* Top Section */}
+    <div className="flex h-screen w-64 flex-col justify-between border-r border-gray-800 bg-black text-white">
       <div className="p-4">
-        
-        {/* Logo / Title */}
-        <h2 className="text-2xl font-semibold mb-6 tracking-wide">
+        <h2 className="mb-6 text-2xl font-semibold tracking-wide">
           Wiin<span className="text-gray-400">AI</span>
         </h2>
 
-        {/* Navigation */}
         <div className="space-y-2">
           <NavLink to="/dashboard/chat" end className={linkClass}>
-            💬 New Chat
+            <MessageCircle className="size-4" />
+            New Chat
           </NavLink>
 
           <NavLink to="/dashboard/history" className={linkClass}>
-            🕘 History
+            <Clock className="size-4" />
+            History
           </NavLink>
 
           <NavLink to="/dashboard/settings" className={linkClass}>
-            ⚙️ Settings
-          </NavLink>
-          <NavLink to="/dashboard/image" className={linkClass}>
-            ⚙️ Generate Image
+            <Settings className="size-4" />
+            Settings
           </NavLink>
 
+          <NavLink to="/dashboard/image" className={linkClass}>
+            <ImageIcon className="size-4" />
+            Generate Image
+          </NavLink>
+
+          <NavLink to="/dashboard/vision" className={linkClass}>
+            <Eye className="size-4" />
+            Vision Service
+          </NavLink>
         </div>
       </div>
 
-      {/* Bottom Section */}
-      <div className="p-4 border-t border-gray-800">
+      <div className="border-t border-gray-800 p-4">
         <LogOutBtn />
       </div>
     </div>
